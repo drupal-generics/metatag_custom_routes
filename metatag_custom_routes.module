@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Contains metatag_custom_routes.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function metatag_custom_routes_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the metatag_custom_routes module.
+    case 'help.page.metatag_custom_routes':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Provides Meta Tag configuration for custom routes.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_metatags_alter().
+ */
+function metatag_custom_routes_metatags_alter(&$metatags, $context) {
+  /** @var \Drupal\Core\Routing\RouteMatchInterface $routeMatch */
+  $routeMatch = \Drupal::routeMatch();
+  $currentRouteName = $routeMatch->getRouteName();
+
+  /** @var \Drupal\metatag_custom_routes\Storage\MetatagCustomRoutesStorage $storage */
+  $storage = \Drupal::entityTypeManager()->getStorage('metatag_custom_routes');
+
+  $entity = $storage->loadEntityByRouteName($currentRouteName);
+
+  if (!$entity) {
+    // We need the path of the route and not the request URI, in order to load
+    // the correct entity.
+    $uri = $routeMatch->getRouteObject()->getPath();
+    $entity = $storage->loadEntityByUri($uri);
+  }
+
+  if ($entity) {
+    $tags = $entity->get('tags');
+
+    $metatags = array_merge($metatags, $tags);
+  }
+}

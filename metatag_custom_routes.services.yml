@@ -1,0 +1,4 @@
+services:
+  metatag_custom_routes.routes_helper:
+    class: Drupal\metatag_custom_routes\MetatagCustomRoutesHelper
+    arguments: ['@transliteration']

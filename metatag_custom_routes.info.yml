@@ -1,0 +1,7 @@
+name: Metatag Custom Routes
+type: module
+description: Provides Meta Tag configuration for custom routes.
+core: 8.x
+package: Metatag
+dependencies:
+  - metatag

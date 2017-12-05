@@ -1,0 +1,15 @@
+metatag_custom_routes.metatag_custom_routes.*:
+  type: config_entity
+  label: 'Metatag custom routes config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    tags:
+      type: sequence
+      label: 'Tags'
+      sequence:
+        type: metatag.metatag_tag.[%key]
